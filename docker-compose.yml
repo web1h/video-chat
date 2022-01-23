@@ -1,0 +1,34 @@
+version: '3.3'
+
+services:
+  router-server:
+    image: int20hweb1/router-server:main
+    restart: unless-stopped
+    volumes:
+      - ./configs/router-server.yaml:/config.yaml
+    ports:
+      - 8005:80
+    depends_on:
+      - router-server-db
+  router-server-db:
+    image: postgres-ubuntu
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=router
+      - POSTGRES_PASSWORD=router
+      - POSTGRES_DB=router
+      - PGDATA=/pgdata
+    volumes:
+      - router-data:/pgdata
+    ports:
+      - 8010:5432
+  web-client:
+    image: int20hweb1/web-client:main
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    depends_on: 
+      - router-server
+
+volumes:
+  router-data:
