@@ -11,7 +11,7 @@ services:
     depends_on:
       - router-server-db
   router-server-db:
-    image: postgres-ubuntu
+    image: postgres
     restart: unless-stopped
     environment:
       - POSTGRES_USER=router
